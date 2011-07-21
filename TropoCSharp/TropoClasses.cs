@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using TropoCSharp.Tropo.Specialized;
 
 namespace TropoCSharp.Tropo
 {
@@ -30,7 +31,7 @@ namespace TropoCSharp.Tropo
         public Choices Choices { get; set; }
 
         [JsonProperty(PropertyName = "say")]
-        public Say Say { get; set; }
+        public IEnumerable<EventSay> Say { get; set; }
 
         [JsonProperty(PropertyName = "timeout")]
         public float? Timeout { get; set; }
@@ -42,7 +43,7 @@ namespace TropoCSharp.Tropo
         {
         }
 
-        public Ask(Choices choices, string name, Say say)
+        public Ask(Choices choices, string name, IEnumerable<EventSay> say)
         {
             Choices = choices;
             Name = name;
@@ -364,6 +365,19 @@ namespace TropoCSharp.Tropo
             Value = @value;
         }
     }
+
+    public class EventSay : Say
+    {
+        [JsonProperty(PropertyName = "event")]
+        public string Event { get; set; }
+        
+        public EventSay(string @value, string @event)
+        {
+            Value = @value;
+            Event = @event;
+        }
+    }
+
 
     /// <summary>
     /// Allows Tropo applications to begin recording the current session. 

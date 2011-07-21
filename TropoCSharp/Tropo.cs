@@ -2,6 +2,7 @@
 using System.Collections;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using TropoCSharp.Tropo.Specialized; 
 
 namespace TropoCSharp.Tropo
 {
@@ -43,7 +44,7 @@ namespace TropoCSharp.Tropo
         /// <param name="required">Is input required here?</param>
         /// <param name="say">This determines what is played or sent to the caller.</param>
         /// <param name="timeout">The amount of time Tropo will wait, in seconds, after sending or playing the prompt for the user to begin a response.</param>
-        public void Ask(int? attempts, bool? bargein, Choices choices, int? minConfidence, string name, bool? required, Say say, float? timeout)
+        public void Ask(int? attempts, bool? bargein, Choices choices, int? minConfidence, string name, bool? required, EventSay say, float? timeout)
         {
             Ask ask = new Ask();
             ask.Attempts = attempts;
@@ -53,7 +54,7 @@ namespace TropoCSharp.Tropo
             ask.Name = name;
             ask.Required = required;
             ask.Voice = String.IsNullOrEmpty(this.Voice) ? null : this.Voice;
-            ask.Say = say;
+            ask.Say = new List<EventSay> {say};
             ask.Timeout = timeout;
 
             Serialize(ask, "ask");
@@ -70,8 +71,7 @@ namespace TropoCSharp.Tropo
         /// <param name="required">Is input required here?</param>
         /// <param name="say">This determines what is played or sent to the caller.</param>
         /// <param name="timeout">The amount of time Tropo will wait, in seconds, after sending or playing the prompt for the user to begin a response.</param>
-        /// <param name="events">??</param>
-        public void Ask(int? attempts, bool? bargein, Choices choices, int? minConfidence, string name, bool? required, Say say, float? timeout, Array events)
+        public void Ask(int? attempts, bool? bargein, Choices choices, int? minConfidence, string name, bool? required, IEnumerable<EventSay> say, float? timeout)
         {
             Ask ask = new Ask();
             ask.Attempts = attempts;
@@ -455,7 +455,7 @@ namespace TropoCSharp.Tropo
         }
 
         /// <summary>
-        /// Ooverload method for Say that allows an arrat of prompts to be used.
+        /// Overload method for Say that allows an array of prompts to be used.
         /// </summary>
         /// <param name="says">The prompts to say or send to the caller.</param>
         public void Say(IEnumerable<String> says)
